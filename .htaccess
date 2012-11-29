@@ -1,0 +1,3 @@
+RewriteEngine On
+
+RewriteRule ^getinfo/([0-9-\_]+)?$ /getinfo.php/$1 [NC,L]
