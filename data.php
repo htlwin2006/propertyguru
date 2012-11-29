@@ -2,7 +2,7 @@
 
 class baseObj {
     public $mysql = null;
-    private $table = null;
+    protected  $table = null;
 
     public function __construct ()
     {
@@ -14,12 +14,12 @@ class baseObj {
 
     public function get ($id, $field)
     {
-        return $this->mysql->query("SELECT $field FROM $table WHERE ID = $id");
+        return $this->mysql->query("SELECT $field FROM $this->table WHERE ID = $id");
     }
 
     public function getAll ($id)
     {
-        $res = $this->mysql->query("SELECT * FROM $table WHERE ID = $id");
+        $res = $this->mysql->query("SELECT * FROM $this->table WHERE ID = $id");
         return $res->fetch_assoc();
     }
 }
@@ -35,23 +35,32 @@ class propertyData extends baseObj {
     protected $hdbblock = null;
     private $swimmingPool = null;
 
-    private $table = 'Property';
+	public function __construct (){
+        parent::__construct();
+        $this->table  = 'Property';
+    }
 
     public function getType ($ID) { $Type = $this->get( $ID, 'Type'); return $Type; }
-    public function getTitle ($ID) { $Title = $this->get( $ID, 'Title') ; return $Type;}
+    public function getTitle ($ID) { $Title = $this->get( $ID, 'Title') ; return $Title;}
     public function getAddress ($ID) { $Address = $this->get( $ID, 'Address') ; return $Address;}
     public function getBedroom ($ID) { $Bedroom = $this->get( $ID, 'Bedroom') ; return $Bedroom;}
     public function getLivingroom ($ID) { $livingroom = $this->get( $ID, 'Living_room') ; return $livingroom;}
     public function getDiningroom ($ID) { $diningroom = $this->get( $ID, 'Diningroom') ; return $diningroom;}
 }
 
-class hdbData extends propertyData {
-    private $table = 'HDB';
+class hdbData extends propertyData {    
+	public function __construct (){
+        parent::__construct();
+        $this->table  = 'HDB';
+    }
     public function getHDBBlock ($ID) { $this->hdbblock = $this->get($ID, 'HDBBlock'); return $this->hdbblock; }
 }
 
 class condoData extends propertyData {
-    private $table = 'ConDO';
+	public function __construct (){
+        parent::__construct();
+        $this->table  = 'ConDO';
+    }
     public function gotSwimmingPool ($ID)
     {
         return $this->get($ID, 'SwimmingPool');
